@@ -11,19 +11,8 @@ public class ClinicCalendarShould {
 
     private ClinicCalendar calendar;
 
-    @BeforeAll
-    static void testClassSetup(){
-        System.out.println("Antes de tudo...");
-    }
-
-    @BeforeEach
-    void init(){
-        System.out.println("Antes de cada um");
-        calendar = new ClinicCalendar(LocalDate.of(2022,7,11));
-    }
-
     @Test
-    @DisplayName("verifica se os dados cadastrados estão correndo")
+    @DisplayName("verifica se o agendamento pertence ao usuario que digitou")
     void allowEntryOfAnAppointment(){
         calendar = new ClinicCalendar(LocalDate.now());
         calendar.addAppointment(
@@ -36,13 +25,21 @@ public class ClinicCalendarShould {
         Assertions.assertNotNull(appointments);
         Assertions.assertEquals(1,appointments.size());
         PatientAppointment enteredAppt = appointments.get(0);
-        Assertions.assertEquals("Genivaldo",enteredAppt.getPatientFirstName());
-        Assertions.assertEquals("Alves",enteredAppt.getPatientLastName());
-        Assertions.assertEquals(Doctor.avery,enteredAppt.getDoctor());
-        Assertions.assertSame(Doctor.avery,enteredAppt.getDoctor());
-        Assertions.assertEquals("07/09/2022 6:00 PM",
-                enteredAppt.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a")),
-                ()-> "Ao usar lambda essa mensagem só será exibida se o teste falhar.");
+
+
+        /* Podemos fazer uma verificação em serie,
+        para que as asserções sejam executadas em serie e não individualmente */
+        Assertions.assertAll(
+
+                ()->Assertions.assertEquals("Genivaldo",enteredAppt.getPatientFirstName()),
+                ()->Assertions.assertEquals("Alves",enteredAppt.getPatientLastName()),
+                ()->Assertions.assertEquals(Doctor.avery,enteredAppt.getDoctor()),
+                ()->Assertions.assertSame(Doctor.avery,enteredAppt.getDoctor()),
+                ()->Assertions.assertEquals("07/09/2022 6:00 PM",
+                        enteredAppt.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a")),
+                        ()-> "Ao usar lambda essa mensagem só será exibida se o teste falhar.")
+        );
+
     }
 
     @Test
@@ -65,6 +62,8 @@ public class ClinicCalendarShould {
     }
 
     @Test
+    /* A anotação disable faz com que o teste não seja executado mas continue visivel no relatorio de resultado */
+    @Disabled
     @DisplayName("Confere quantidade de agendamentos por dia")
     void returnCurrentDaysAppointments(){
         ClinicCalendar calendar = new ClinicCalendar(LocalDate.now());
@@ -90,13 +89,4 @@ public class ClinicCalendarShould {
         Assertions.assertFalse(calendar.hasAppointment(LocalDate.of(2022,7,30)));
     }
 
-    @AfterEach
-    void tearDownEachTest(){
-        System.out.println("Depois de cada");
-    }
-
-    @AfterAll
-    static void testDownTestClass(){
-        System.out.println("Depois de tudo...");
-    }
 }

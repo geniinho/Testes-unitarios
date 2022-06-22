@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@DisplayName("Teste da classe ClinicCalendar")
 public class ClinicCalendarShould {
 
     private ClinicCalendar calendar;
@@ -22,6 +23,7 @@ public class ClinicCalendarShould {
     }
 
     @Test
+    @DisplayName("verifica se os dados cadastrados estão correndo")
     void allowEntryOfAnAppointment(){
         calendar = new ClinicCalendar(LocalDate.now());
         calendar.addAppointment(
@@ -39,10 +41,12 @@ public class ClinicCalendarShould {
         Assertions.assertEquals(Doctor.avery,enteredAppt.getDoctor());
         Assertions.assertSame(Doctor.avery,enteredAppt.getDoctor());
         Assertions.assertEquals("07/09/2022 6:00 PM",
-                enteredAppt.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a")));
+                enteredAppt.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a")),
+                ()-> "Ao usar lambda essa mensagem só será exibida se o teste falhar.");
     }
 
     @Test
+    @DisplayName("Retorna 'true' caso existe agendamento no dia")
     void returnTrueForHasAppointmentsIfThereAreAppointments(){
         calendar = new ClinicCalendar(LocalDate.now());
         calendar.addAppointment(
@@ -54,12 +58,14 @@ public class ClinicCalendarShould {
     }
 
     @Test
+    @DisplayName("Retorna 'flaso' caso não exista agendamento no dia")
     void returnFalseForHasAppointmentsIfThereAreAppointments(){
         ClinicCalendar calendar = new ClinicCalendar(LocalDate.now());
         Assertions.assertFalse(calendar.hasAppointment(LocalDate.of(2022,7,9)));
     }
 
     @Test
+    @DisplayName("Confere quantidade de agendamentos por dia")
     void returnCurrentDaysAppointments(){
         ClinicCalendar calendar = new ClinicCalendar(LocalDate.now());
         calendar.addAppointment(

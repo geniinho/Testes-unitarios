@@ -1,5 +1,6 @@
 package com.testeunidade.UnitTest;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -7,7 +8,7 @@ public class ClinicMain {
     private static ClinicCalendar calendar;
 
     public static void main(String[] args) throws Throwable {
-        calendar = new ClinicCalendar();
+        calendar = new ClinicCalendar(LocalDate.now());
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the Patient Intake Computer System!\n\n");
         String lastOption = "";

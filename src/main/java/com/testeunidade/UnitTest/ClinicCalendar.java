@@ -1,5 +1,6 @@
 package com.testeunidade.UnitTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,9 +10,10 @@ import java.util.Locale;
 public class ClinicCalendar {
     private List<PatientAppointment> appointments;
 
-    public ClinicCalendar() {
+    public ClinicCalendar(LocalDate now) {
         this.appointments = new ArrayList<>();
     }
+
 
     public void addAppointment(String patientFirstName, String patientLastName, String doctorKey,
                                String dateTime) {
@@ -29,7 +31,14 @@ public class ClinicCalendar {
         appointments.add(appointment);
     }
 
+    
+
     public List<PatientAppointment> getAppointments() {
         return this.appointments;
+    }
+
+    public boolean hasAppointment(LocalDate date) {
+        return appointments.stream()
+                .anyMatch(appt -> appt.getAppointmentDateTime().toLocalDate().equals(date));
     }
 }
